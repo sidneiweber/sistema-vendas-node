@@ -14,8 +14,8 @@ const app = express();
 const conn = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
-  database: 'crud_db'
+  password: 'bolacha',
+  database: 'testedb'
 });
 
 //connect to database
@@ -35,8 +35,34 @@ app.use('/assets',express.static(__dirname + '/public'));
 
 //route for homepage
 app.get('/',(req, res) => {
-  let sql = "SELECT * FROM product";
+  let sql = "SELECT * FROM produtos ORDER BY id DESC LIMIT 100";
   let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.render('product_view',{
+      results: results
+    });
+  });
+});
+
+//route for client
+app.get('/clientes',(req, res) => {
+  let sql = "SELECT * FROM clientes ORDER BY idCliente";
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.render('clientes',{
+      results: results
+    });
+  });
+});
+
+//route search
+app.post('/search/',(req, res) => {
+  var string = req.body.busca.split(" ");
+  var palavra = ("+" + string.join('* +'));
+  //console.log(palavra)
+  //let data = req.body.busca;
+  let sql = "SELECT * FROM produtos WHERE MATCH(codigo,produto,descricao,codigo_original,codigo_paralelo) AGAINST (? IN BOOLEAN MODE) ORDER BY produto,descricao ASC";
+  let query = conn.query(sql, palavra,(err, results) => {
     if(err) throw err;
     res.render('product_view',{
       results: results
@@ -47,7 +73,7 @@ app.get('/',(req, res) => {
 //route for insert data
 app.post('/save',(req, res) => {
   let data = {product_name: req.body.product_name, product_price: req.body.product_price};
-  let sql = "INSERT INTO product SET ?";
+  let sql = "INSERT INTO produtos SET ?";
   let query = conn.query(sql, data,(err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -56,7 +82,7 @@ app.post('/save',(req, res) => {
 
 //route for update data
 app.post('/update',(req, res) => {
-  let sql = "UPDATE product SET product_name='"+req.body.product_name+"', product_price='"+req.body.product_price+"' WHERE product_id="+req.body.id;
+  let sql = "UPDATE produtos SET produto='"+req.body.product_name+"', preco='"+req.body.product_price+"' WHERE id="+req.body.id;
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -65,7 +91,7 @@ app.post('/update',(req, res) => {
 
 //route for delete data
 app.post('/delete',(req, res) => {
-  let sql = "DELETE FROM product WHERE product_id="+req.body.product_id+"";
+  let sql = "DELETE FROM produtos WHERE id="+req.body.product_id+" LIMIT 1";
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
       res.redirect('/');
