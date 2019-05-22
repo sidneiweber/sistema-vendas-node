@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 //use mysql database
 const mysql = require('mysql');
 const app = express();
+var port = process.env.PORT || 8080;
 
 //Create Connection
 const conn = mysql.createConnection({
@@ -99,6 +100,6 @@ app.post('/delete',(req, res) => {
 });
 
 //server listening
-app.listen(8000, () => {
-  console.log('Server is running at port 8000');
+app.listen(port, () => {
+  console.log('Server is running at port: ' + port);
 });
