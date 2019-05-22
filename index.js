@@ -12,10 +12,10 @@ const app = express();
 
 //Create Connection
 const conn = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'bolacha',
-  database: 'testedb'
+  host: 'remotemysql.com',
+  user: 'r9toeBhyGq',
+  password: 'kim91cvd7j',
+  database: 'r9toeBhyGq'
 });
 
 //connect to database
