@@ -73,7 +73,7 @@ app.post('/search/',(req, res) => {
 
 //route for insert data
 app.post('/save',(req, res) => {
-  let data = {product_name: req.body.product_name, product_price: req.body.product_price};
+  let data = {nome: req.body.product_nome, endereci: req.body.endereco};
   let sql = "INSERT INTO produtos SET ?";
   let query = conn.query(sql, data,(err, results) => {
     if(err) throw err;
@@ -87,6 +87,15 @@ app.post('/update',(req, res) => {
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/');
+  });
+});
+
+//route for update data
+app.post('/cliente/update',(req, res) => {
+  let sql = "UPDATE clientes SET nome='"+req.body.product_nome+"', endereco='"+req.body.product_endereco+"', bairro='"+req.body.product_bairro+"', telefone='"+req.body.product_telefone+"' WHERE idCliente="+req.body.id;
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+    res.redirect('/clientes');
   });
 });
 

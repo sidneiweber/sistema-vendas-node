@@ -32,8 +32,8 @@
   </div>
 </nav>
   <div class="container-fluid">
-    <h2>Product List</h2>
-		<button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Adicionar novo produto</button>
+    <h2>Lista de Clientes</h2>
+		<button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Adicionar novo clientes</button>
     <table class="table table-sm table-striped table-hover" id="mytable">
       <thead class="thead-dark">
         <tr>
@@ -60,7 +60,7 @@
           <td>{{ cpf_cnpj }}</td>
           <td>{{ telefone }}</td>
           <td>
-            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ idCliente }}" data-product_name="{{ nome }}" data-product_descricao="{{ endereco }}" data-product_price="{{ telefone }}">Editar</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ idCliente }}" data-product_nome="{{ nome }}" data-product_endereco="{{ endereco }}" data-product_bairro="{{ bairro }}" data-product_telefone="{{ telefone }}">Editar</a>
             <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ idCliente }}">Excluir</a>
           </td>
         </tr>
@@ -70,7 +70,7 @@
   </div>
 
 	<!-- Add New Product Modal-->
-	  <form action="/save" method="post">
+	  <form action="/cliente/save" method="post">
         <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -99,7 +99,7 @@
 	 </form>
 
 	 <!-- Edit Product Modal-->
-   <form action="/update" method="post">
+   <form action="/cliente/update" method="post">
        <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -111,14 +111,16 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                  <input type="text" name="product_name" class="form-control product_name" placeholder="Product Name" required>
+                  <input type="text" name="product_nome" class="form-control product_nome" placeholder="Product Name" required>
               </div>
               <div class="form-group">
-                  <input type="text" name="product_descricao" class="form-control product_descricao" placeholder="Product descricao" required>
+                  <input type="text" name="product_endereco" class="form-control product_endereco" placeholder="Product descricao" required>
               </div>
-
+               <div class="form-group">
+                  <input type="text" name="product_bairro" class="form-control product_bairro" placeholder="Product descricao" required>
+              </div>
               <div class="form-group">
-                  <input type="text" name="product_price" class="form-control price" placeholder="Price" required>
+                  <input type="text" name="product_telefone" class="form-control product_telefone" placeholder="Price" required>
               </div>
             </div>
             <div class="modal-footer">
@@ -161,13 +163,15 @@
 		//showing data to modal for edit record
       $('#mytable').on('click','.edit',function(){
         var product_id = $(this).data('id');
-        var product_name = $(this).data('product_name');
-        var product_descricao = $(this).data('product_descricao');
-        var product_price = $(this).data('product_price');
+        var product_nome = $(this).data('product_nome');
+        var product_endereco = $(this).data('product_endereco');
+        var product_bairro = $(this).data('product_bairro');
+        var product_telefone = $(this).data('product_telefone');
         $('#EditModal').modal('show');
-        $('.product_name').val(product_name);
-        $('.product_descricao').val(product_descricao);
-        $('.price').val(product_price);
+        $('.product_nome').val(product_nome);
+        $('.product_endereco').val(product_endereco);
+        $('.product_bairro').val(product_bairro);
+        $('.product_telefone').val(product_telefone);
         $('.product_id').val(product_id);
       });
 			//showing modal for delete record
