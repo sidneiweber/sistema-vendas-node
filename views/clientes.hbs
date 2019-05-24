@@ -57,7 +57,7 @@
           <td>{{ cpf_cnpj }}</td>
           <td>{{ telefone }}</td>
           <td>
-            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ idCliente }}" data-product_nome="{{ nome }}" data-product_endereco="{{ endereco }}" data-product_bairro="{{ bairro }}" data-product_telefone="{{ telefone }}">Editar</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ idCliente }}" data-product_nome="{{ nome }}" data-product_endereco="{{ endereco }}" data-product_bairro="{{ bairro }}" data-product_cidade="{{ cidade }}" data-product_uf="{{ uf }}" data-product_cpf_cnpj="{{ cpf_cnpj }}" data-product_telefone="{{ telefone }}">Editar</a>
             <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ idCliente }}">Excluir</a>
           </td>
         </tr>
@@ -78,13 +78,27 @@
                </button>
              </div>
              <div class="modal-body">
-               <div class="form-group">
-                   <input type="text" name="product_name" class="form-control" placeholder="Product Name" required>
-               </div>
-
-               <div class="form-group">
-                   <input type="text" name="product_price" class="form-control" placeholder="Price" required>
-               </div>
+              <div class="form-group">
+                  <input type="text" name="product_nome" class="form-control product_nome" placeholder="Nome" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_endereco" class="form-control product_endereco" placeholder="Endereço">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_bairro" class="form-control product_bairro" placeholder="Bairro">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_cidade" class="form-control product_cidade" placeholder="Cidade">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_uf" class="form-control product_uf" placeholder="UF">
+              </div>
+              <div class="form-group">
+                  <input onfocus="javascript: retirarFormatacao(this);" onblur="javascript: formatarCampo(this);" maxlength="14" type="text" name="product_cpf_cnpj" class="form-control product_cpf_cnpj" placeholder="CPF ou CNPJ">
+              </div>
+              <div class="form-group">
+                  <input type="tel" name="product_telefone" class="form-control product_telefone" placeholder="Telefone">
+              </div>
              </div>
              <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -108,16 +122,25 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                  <input type="text" name="product_nome" class="form-control product_nome" placeholder="Product Name" required>
+                  <input type="text" name="product_nome" class="form-control product_nome" placeholder="Nome" required>
               </div>
               <div class="form-group">
-                  <input type="text" name="product_endereco" class="form-control product_endereco" placeholder="Product descricao" required>
-              </div>
-               <div class="form-group">
-                  <input type="text" name="product_bairro" class="form-control product_bairro" placeholder="Product descricao" required>
+                  <input type="text" name="product_endereco" class="form-control product_endereco" placeholder="Endereço">
               </div>
               <div class="form-group">
-                  <input type="text" name="product_telefone" class="form-control product_telefone" placeholder="Price" required>
+                  <input type="text" name="product_bairro" class="form-control product_bairro" placeholder="Bairro">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_cidade" class="form-control product_cidade" placeholder="Cidade">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_uf" class="form-control product_uf" placeholder="UF">
+              </div>
+              <div class="form-group">
+                  <input onfocus="javascript: retirarFormatacao(this);" onblur="javascript: formatarCampo(this);" maxlength="14" type="text" name="product_cpf_cnpj" class="form-control product_cpf_cnpj" placeholder="CPF ou CNPJ">
+              </div>
+              <div class="form-group">
+                  <input type="tel" name="product_telefone" class="form-control product_telefone" placeholder="Telefone">
               </div>
             </div>
             <div class="modal-footer">
@@ -131,7 +154,7 @@
   </form>
 
 	 <!-- Delete Product Modal-->
- 	  <form id="add-row-form" action="/delete" method="post">
+ 	  <form id="add-row-form" action="/cliente/delete" method="post">
  	     <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
  	        <div class="modal-dialog">
  	           <div class="modal-content">
@@ -156,6 +179,26 @@
 <script src="/assets/js/bootstrap.js"></script>
 <script src="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
+  function formatarCampo(campoTexto) {
+    if (campoTexto.value.length <= 11) {
+        campoTexto.value = mascaraCpf(campoTexto.value);
+    } else {
+        campoTexto.value = mascaraCnpj(campoTexto.value);
+    }
+}
+function retirarFormatacao(campoTexto) {
+    campoTexto.value = campoTexto.value.replace(/(\.|\/|\-)/g,"");
+}
+function mascaraCpf(valor) {
+    return valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g,"\$1.\$2.\$3\-\$4");
+}
+function mascaraCnpj(valor) {
+    return valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g,"\$1.\$2.\$3\/\$4\-\$5");
+}
+</script>
+
+
+<script>
     $(document).ready(function(){
 		//showing data to modal for edit record
       $('#mytable').on('click','.edit',function(){
@@ -163,11 +206,17 @@
         var product_nome = $(this).data('product_nome');
         var product_endereco = $(this).data('product_endereco');
         var product_bairro = $(this).data('product_bairro');
+        var product_cidade = $(this).data('product_cidade');
+        var product_uf = $(this).data('product_uf');
+        var product_cpf_cnpj = $(this).data('product_cpf_cnpj');
         var product_telefone = $(this).data('product_telefone');
         $('#EditModal').modal('show');
         $('.product_nome').val(product_nome);
         $('.product_endereco').val(product_endereco);
         $('.product_bairro').val(product_bairro);
+        $('.product_cidade').val(product_cidade);
+        $('.product_uf').val(product_uf);
+        $('.product_cpf_cnpj').val(product_cpf_cnpj);
         $('.product_telefone').val(product_telefone);
         $('.product_id').val(product_id);
       });

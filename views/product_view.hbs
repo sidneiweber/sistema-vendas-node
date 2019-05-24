@@ -38,6 +38,7 @@
           <th>Código</th>
           <th>Produto</th>
           <th>Descrição</th>
+          <th>QTD</th>
           <th>COD</th>
           <th>COD.Paralelo</th>
           <th>Preço</th>
@@ -52,12 +53,13 @@
           <td>{{ codigo }}</td>
           <td>{{ produto }} </td>
           <td>{{ descricao }}</td>
+          <td>{{ estoque }}</td>
           <th>{{ codigo_original }}</th>
           <th>{{ codigo_paralelo }}</th>
           <td>{{ preco }}</td>
           <td>{{ promocao }}</td>
           <td>
-            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ id }}" data-product_name="{{ produto }}" data-product_descricao="{{ descricao }}" data-product_price="{{ preco }}">Editar</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ id }}" data-product_codigo="{{ codigo }}" data-product_produto="{{ produto }}" data-product_descricao="{{ descricao }}" data-product_estoque="{{ estoque }}" data-product_codigo_original="{{ codigo_original }}" data-product_codigo_paralelo="{{ codigo_paralelo }}" data-product_ncm="{{ ncm }}" data-product_preco="{{ preco }}" data-product_promocao="{{ promocao }}" data-product_custo="{{ custo }}" data-product_ultimo_fornecedor="{{ ultimo_fornecedor }}">Editar</a>
             <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id }}">Excluir</a>
           </td>
         </tr>
@@ -67,7 +69,7 @@
   </div>
 
 	<!-- Add New Product Modal-->
-	  <form action="/save" method="post">
+	  <form action="/produto/save" enctype="multipart/form-data" method="post">
         <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -78,13 +80,42 @@
                </button>
              </div>
              <div class="modal-body">
-               <div class="form-group">
-                   <input type="text" name="product_name" class="form-control" placeholder="Product Name" required>
-               </div>
-
-               <div class="form-group">
-                   <input type="text" name="product_price" class="form-control" placeholder="Price" required>
-               </div>
+              <div class="form-group">
+                  <input type="text" name="product_codigo" class="form-control product_codigo" placeholder="Código" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_produto" class="form-control product_produto" placeholder="Produto" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_descricao" class="form-control product_descricao" placeholder="Descrição" required>
+              </div>
+              <div class="form-group">
+                  <input type="number" name="product_estoque" class="form-control product_estoque" placeholder="Estoque" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_codigo_original" class="form-control product_codigo_original" placeholder="Código Original">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_codigo_paralelo" class="form-control product_codigo_paralelo" placeholder="Código Paralelo">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_ncm" class="form-control product_ncm" placeholder="NCM">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_preco" class="form-control product_preco" placeholder="Preço" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_promocao" class="form-control product_promocao" placeholder="Promoção">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_custo" class="form-control product_custo" placeholder="Custo">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_ultimo_fornecedor" class="form-control product_ultimo_fornecedor" placeholder="Último Fornecedor">
+              </div>
+              <div class="form-group">
+                  <input type="file" accept="image/*" name="product_foto">
+              </div>
              </div>
              <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -96,7 +127,7 @@
 	 </form>
 
 	 <!-- Edit Product Modal-->
-   <form action="/update" method="post">
+   <form action="/produto/update" method="post">
        <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -108,14 +139,37 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                  <input type="text" name="product_name" class="form-control product_name" placeholder="Product Name" required>
+                  <input type="text" name="product_codigo" class="form-control product_codigo" placeholder="Código" required>
               </div>
               <div class="form-group">
-                  <input type="text" name="product_descricao" class="form-control product_descricao" placeholder="Product descricao" required>
+                  <input type="text" name="product_produto" class="form-control product_produto" placeholder="Produto" required>
               </div>
-
               <div class="form-group">
-                  <input type="text" name="product_price" class="form-control price" placeholder="Price" required>
+                  <input type="text" name="product_descricao" class="form-control product_descricao" placeholder="Descrição" required>
+              </div>
+              <div class="form-group">
+                  <input type="number" name="product_estoque" class="form-control product_estoque" placeholder="Estoque">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_codigo_original" class="form-control product_codigo_original" placeholder="Código Original">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_codigo_paralelo" class="form-control product_codigo_paralelo" placeholder="Código Paralelo">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_ncm" class="form-control product_ncm" placeholder="NCM">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_preco" class="form-control product_preco" placeholder="Preço" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_promocao" class="form-control product_promocao" placeholder="Promoção">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_custo" class="form-control product_custo" placeholder="Custo">
+              </div>
+              <div class="form-group">
+                  <input type="text" name="product_ultimo_fornecedor" class="form-control product_ultimo_fornecedor" placeholder="Último Fornecedor">
               </div>
             </div>
             <div class="modal-footer">
@@ -158,13 +212,29 @@
 		//showing data to modal for edit record
       $('#mytable').on('click','.edit',function(){
         var product_id = $(this).data('id');
-        var product_name = $(this).data('product_name');
+        var product_codigo = $(this).data('product_codigo');
+        var product_produto = $(this).data('product_produto');
         var product_descricao = $(this).data('product_descricao');
-        var product_price = $(this).data('product_price');
+        var product_estoque = $(this).data('product_estoque');
+        var product_codigo_original = $(this).data('product_codigo_original');
+        var product_codigo_paralelo = $(this).data('product_codigo_paralelo');
+        var product_ncm = $(this).data('product_ncm');
+        var product_preco = $(this).data('product_preco');
+        var product_promocao = $(this).data('product_promocao');
+        var product_custo = $(this).data('product_custo');
+        var product_ultimo_fornecedor = $(this).data('product_ultimo_fornecedor');
         $('#EditModal').modal('show');
-        $('.product_name').val(product_name);
+        $('.product_codigo').val(product_codigo);
+        $('.product_produto').val(product_produto);
         $('.product_descricao').val(product_descricao);
-        $('.price').val(product_price);
+        $('.product_estoque').val(product_estoque);
+        $('.product_codigo_original').val(product_codigo_original);
+        $('.product_codigo_paralelo').val(product_codigo_paralelo);
+        $('.product_ncm').val(product_ncm);
+        $('.product_preco').val(product_preco);
+        $('.product_promocao').val(product_promocao);
+        $('.product_custo').val(product_custo);
+        $('.product_ultimo_fornecedor').val(product_ultimo_fornecedor);
         $('.product_id').val(product_id);
       });
 			//showing modal for delete record

@@ -2,6 +2,7 @@
 const path = require('path');
 //use express module
 const express = require('express');
+const fileUpload = require('express-fileupload');
 //use hbs view engine
 const hbs = require('hbs');
 //use bodyParser middleware
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //set folder public as static folder for static file
 app.use('/assets',express.static(__dirname + '/public'));
+app.use(fileUpload());
 
 //route for homepage
 app.get('/',(req, res) => {
@@ -71,9 +73,16 @@ app.post('/search/',(req, res) => {
   });
 });
 
-//route for insert data
-app.post('/save',(req, res) => {
-  let data = {nome: req.body.product_nome, endereci: req.body.endereco};
+//route for insert product
+app.post('/produto/save', (req, res) => {
+  var file = req.files.product_foto;
+  var img_name=file.name;
+  console.log(img_name);
+  file.mv('./public/fotos/'+img_name, function(err) {
+    if (err)
+      return res.status(500).send(err);
+  });
+  let data = {codigo: req.body.product_codigo, produto: req.body.product_produto, descricao: req.body.product_descricao, estoque: req.body.product_estoque, codigo_original: req.body.product_codigo_original, codigo_paralelo: req.body.product_codigo_paralelo, ncm: req.body.product_ncm, preco: req.body.product_preco, promocao: req.body.product_promocao, custo: req.body.product_custo, ultimo_fornecedor: req.body.product_ultimo_fornecedor, foto: img_name};
   let sql = "INSERT INTO produtos SET ?";
   let query = conn.query(sql, data,(err, results) => {
     if(err) throw err;
@@ -81,9 +90,20 @@ app.post('/save',(req, res) => {
   });
 });
 
+
+//route for insert client
+app.post('/cliente/save',(req, res) => {
+  let data = {nome: req.body.product_nome, endereco: req.body.product_endereco, bairro: req.body.product_bairro, cidade: req.body.product_cidade, uf: req.body.product_uf, cpf_cnpj: req.body.product_cpf_cnpj, telefone: req.body.product_telefone};
+  let sql = "INSERT INTO clientes SET ?";
+  let query = conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.redirect('/clientes');
+  });
+});
+
 //route for update data
-app.post('/update',(req, res) => {
-  let sql = "UPDATE produtos SET produto='"+req.body.product_name+"', preco='"+req.body.product_price+"' WHERE id="+req.body.id;
+app.post('/produto/update',(req, res) => {
+  let sql = "UPDATE produtos SET codigo='"+req.body.product_codigo+"', produto='"+req.body.product_produto+"', descricao='"+req.body.product_descricao+"', estoque='"+req.body.product_estoque+"', codigo_original='"+req.body.product_codigo_original+"', codigo_paralelo='"+req.body.product_codigo_paralelo+"', ncm='"+req.body.product_ncm+"', preco='"+req.body.product_preco+"', promocao='"+req.body.product_promocao+"', custo='"+req.body.product_custo+"', ultimo_fornecedor='"+req.body.product_ultimo_fornecedor+"' WHERE id="+req.body.id;
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -92,7 +112,7 @@ app.post('/update',(req, res) => {
 
 //route for update data
 app.post('/cliente/update',(req, res) => {
-  let sql = "UPDATE clientes SET nome='"+req.body.product_nome+"', endereco='"+req.body.product_endereco+"', bairro='"+req.body.product_bairro+"', telefone='"+req.body.product_telefone+"' WHERE idCliente="+req.body.id;
+  let sql = "UPDATE clientes SET nome='"+req.body.product_nome+"', endereco='"+req.body.product_endereco+"', bairro='"+req.body.product_bairro+"', cidade='"+req.body.product_cidade+"', uf='"+req.body.product_uf+"', cpf_cnpj='"+req.body.product_cpf_cnpj+"', telefone='"+req.body.product_telefone+"' WHERE idCliente="+req.body.id;
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
     res.redirect('/clientes');
@@ -105,6 +125,15 @@ app.post('/delete',(req, res) => {
   let query = conn.query(sql, (err, results) => {
     if(err) throw err;
       res.redirect('/');
+  });
+});
+
+//route for delete data
+app.post('/cliente/delete',(req, res) => {
+  let sql = "DELETE FROM clientes WHERE idCliente="+req.body.product_id+" LIMIT 1";
+  let query = conn.query(sql, (err, results) => {
+    if(err) throw err;
+      res.redirect('/clientes');
   });
 });
 
