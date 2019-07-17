@@ -10,14 +10,14 @@ const bodyParser = require('body-parser');
 //use mysql database
 const mysql = require('mysql');
 const app = express();
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 5000;
 
 //Create Connection
 const conn = mysql.createConnection({
-  host: 'remotemysql.com',
-  user: 'r9toeBhyGq',
-  password: 'kim91cvd7j',
-  database: 'r9toeBhyGq'
+  host: '192.168.3.18',
+  user: 'root',
+  password: 'bolacha',
+  database: 'data'
 });
 
 //connect to database
